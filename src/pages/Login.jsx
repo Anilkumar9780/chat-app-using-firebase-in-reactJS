@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 // package
 import { useNavigate, Link } from "react-router-dom";
+import { toast } from 'react-toastify';
+
 
 // components
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -25,6 +27,9 @@ const Login = () => {
       navigate("/")
     } catch (err) {
       setErr(true);
+      toast.error("Something went wrong", {
+        position: toast.POSITION.TOP_RIGHT
+      })
     }
   };
 
@@ -33,11 +38,13 @@ const Login = () => {
       <div className="formWrapper">
         <span className="logo">Me Chat</span>
         <span className="title">Login</span>
-        <form  onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <input type="email" placeholder="email" />
           <input type="password" placeholder="password" />
           <button>Sign in</button>
-          {err && <span style={{ color: "red" }}>Something went wrong</span>}
+          {/* {err && toast.error("Something went wrong", {
+            position: toast.POSITION.TOP_RIGHT
+          })} */}
         </form>
         <p>You don't have an account?<Link to="/register">Register</Link>
         </p>

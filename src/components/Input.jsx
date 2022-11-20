@@ -22,7 +22,8 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { db, storage } from "../firebase";
 
 // package auto gen id
-import { v4 as uuid } from "uuid";
+// import { v4 as uuid } from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 
 
 const Input = () => {
@@ -39,7 +40,7 @@ const Input = () => {
    */
   const handleSend = async () => {
     if (img) {
-      const storageRef = ref(storage, uuid());
+      const storageRef = ref(storage, uuidv4());
 
       const uploadTask = uploadBytesResumable(storageRef, img);
 
@@ -51,7 +52,7 @@ const Input = () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
             await updateDoc(doc(db, "chats", data.chatId), {
               messages: arrayUnion({
-                id: uuid(),
+                id: uuidv4(),
                 text,
                 senderId: currentUser.uid,
                 date: Timestamp.now(),
@@ -64,7 +65,7 @@ const Input = () => {
     } else {
       await updateDoc(doc(db, "chats", data.chatId), {
         messages: arrayUnion({
-          id: uuid(),
+          id: uuidv4(),
           text,
           senderId: currentUser.uid,
           date: Timestamp.now(),

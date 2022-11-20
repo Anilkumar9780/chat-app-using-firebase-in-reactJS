@@ -10,6 +10,10 @@ import { doc, setDoc } from "firebase/firestore";
 
 // package
 import { useNavigate, Link } from "react-router-dom";
+import { toast } from 'react-toastify';
+
+// loader package
+import { Audio } from 'react-loader-spinner'
 
 const Register = () => {
   // states
@@ -82,8 +86,18 @@ const Register = () => {
             <span>Add an avatar</span>
           </label>
           <button>Sign up</button>
-          {loading && "Uploading and compressing the image please wait..."}
-          {err && <span>Something went wrong</span>}
+          {loading && < Audio
+            height="80"
+            width="80"
+            radius="9"
+            color='green'
+            ariaLabel='three-dots-loading'
+            wrapperStyle
+            wrapperClass
+          />}
+          {err && toast.error("Something went wrong", {
+            position: toast.POSITION.TOP_RIGHT
+          })}
         </form>
         <p>
           You do have an account?

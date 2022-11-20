@@ -1,5 +1,8 @@
 import React, { useContext, useState } from "react";
 
+// package
+import { toast } from 'react-toastify';
+
 // firebase component
 import {
   collection,
@@ -38,8 +41,11 @@ const Search = () => {
       querySnapshot.forEach((doc) => {
         setUser(doc.data());
       });
-    } catch (err) {
+    } catch (error) {
       setErr(true);
+      toast.error(error, {
+        position: toast.POSITION.TOP_RIGHT
+      });
     }
   };
 
@@ -86,9 +92,12 @@ const Search = () => {
           [combinedId + ".date"]: serverTimestamp(),
         });
       }
-    } catch (err) { }
+    } catch (error) { }
     setUser(null);
-    setUsername("")
+    setUsername("");
+    toast.error("User not found!", {
+      position: toast.POSITION.TOP_RIGHT
+    });
   };
 
   return (
@@ -102,7 +111,9 @@ const Search = () => {
           value={username}
         />
       </div>
-      {err && <span>User not found!</span>}
+      {err && toast.error("User not found!", {
+        position: toast.POSITION.TOP_RIGHT
+      })}
       {user && (
         <div className="userChat"
           onClick={handleSelect}
