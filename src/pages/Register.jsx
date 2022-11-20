@@ -1,16 +1,26 @@
 import React, { useState } from "react";
+// images src
 import Add from "../img/addAvatar.png";
+
+// firebase components
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db, storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
+
+// package
 import { useNavigate, Link } from "react-router-dom";
 
 const Register = () => {
+  // states
   const [err, setErr] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  /**
+   * Register user
+   * @param {object} e 
+   */
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();

@@ -1,9 +1,14 @@
-import React, { useContext } from 'react'
+import React, { useContext } from 'react';
+
+// component firebase
 import { signOut } from "firebase/auth"
 import { auth } from '../firebase'
+
+// context component
 import { AuthContext } from '../context/AuthContext'
 
 const Navbar = () => {
+  // get user info
   const { currentUser } = useContext(AuthContext)
 
   return (

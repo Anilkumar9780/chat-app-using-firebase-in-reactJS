@@ -1,29 +1,39 @@
-import { doc, onSnapshot } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
+
+// firebase package
+import { doc, onSnapshot } from "firebase/firestore";
+
+// context component
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
+
+// firebase component
 import { db } from "../firebase";
 
 const Chats = () => {
+  // states
   const [chats, setChats] = useState([]);
-
+   
   const { currentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
 
+  // user chats update 
   useEffect(() => {
     const getChats = () => {
       const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
         setChats(doc.data());
       });
-
       return () => {
         unsub();
       };
     };
-
     currentUser.uid && getChats();
   }, [currentUser.uid]);
 
+  /**
+   *  user select
+   * @param {object} u 
+   */
   const handleSelect = (u) => {
     dispatch({ type: "CHANGE_USER", payload: u });
   };

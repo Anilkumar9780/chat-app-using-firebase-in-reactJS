@@ -1,12 +1,19 @@
 import React, { useContext } from "react";
+
+// images
 import Cam from "../img/cam.png";
 import Add from "../img/add.png";
 import More from "../img/more.png";
+
+// component
 import Messages from "./Messages";
 import Input from "./Input";
+
+// context component
 import { ChatContext } from "../context/ChatContext";
 
 const Chat = () => {
+  // user info
   const { data } = useContext(ChatContext);
 
   return (

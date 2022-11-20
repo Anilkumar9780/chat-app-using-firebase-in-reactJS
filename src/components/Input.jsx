@@ -1,8 +1,14 @@
 import React, { useContext, useState } from "react";
+
+// images
 import Img from "../img/img.png";
 import Attach from "../img/attach.png";
+
+// context componet
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
+
+// firebase package
 import {
   arrayUnion,
   doc,
@@ -10,17 +16,27 @@ import {
   Timestamp,
   updateDoc,
 } from "firebase/firestore";
-import { db, storage } from "../firebase";
-import { v4 as uuid } from "uuid";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
+// firebase component
+import { db, storage } from "../firebase";
+
+// package auto gen id
+import { v4 as uuid } from "uuid";
+
+
 const Input = () => {
+  // states
   const [text, setText] = useState("");
   const [img, setImg] = useState(null);
 
+  // user info get
   const { currentUser } = useContext(AuthContext);
   const { data } = useContext(ChatContext);
 
+  /**
+   * send user messages
+   */
   const handleSend = async () => {
     if (img) {
       const storageRef = ref(storage, uuid());
