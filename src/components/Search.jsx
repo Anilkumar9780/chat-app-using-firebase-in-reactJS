@@ -1,4 +1,6 @@
 import React, { useContext, useState } from "react";
+
+// firebase component
 import {
   collection,
   query,
@@ -11,14 +13,20 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
+
+//  context component
 import { AuthContext } from "../context/AuthContext";
+
 const Search = () => {
+  // states
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
   const [err, setErr] = useState(false);
-
   const { currentUser } = useContext(AuthContext);
 
+  /**
+   * search user
+   */
   const handleSearch = async () => {
     const q = query(
       collection(db, "users"),
@@ -35,10 +43,17 @@ const Search = () => {
     }
   };
 
+  /**
+   * onchange key
+   * @param {object} e 
+   */
   const handleKey = (e) => {
     e.code === "Enter" && handleSearch();
   };
 
+  /**
+   * on select user
+   */
   const handleSelect = async () => {
     //check whether the group(chats in firestore) exists, if not create
     const combinedId =
@@ -72,7 +87,6 @@ const Search = () => {
         });
       }
     } catch (err) { }
-
     setUser(null);
     setUsername("")
   };
