@@ -1,6 +1,6 @@
 import React from "react";
 
-// component
+// components
 import Navbar from "./Navbar"
 import Search from "./Search"
 import Chats from "./Chats"

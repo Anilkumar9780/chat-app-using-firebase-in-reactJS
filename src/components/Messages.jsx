@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 // component context
 import { ChatContext } from "../context/ChatContext";
 
-// firebase package
+// firebase  library
 import { doc, onSnapshot } from "firebase/firestore";
 
 // firebase component

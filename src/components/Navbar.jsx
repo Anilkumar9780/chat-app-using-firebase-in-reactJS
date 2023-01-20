@@ -11,14 +11,21 @@ const Navbar = () => {
   // get user info
   const { currentUser } = useContext(AuthContext)
 
+  /**
+   * user logoout 
+   */
+  const logout = async () => {
+    await signOut(auth)
+  };
+
   return (
     <div className='navbar'>
-      <span className="logo">Me Chat</span>
+      <span className="logo"><img src="https://img.icons8.com/color/48/null/communication.png" alt="https://img.icons8.com/color/48/null/communication.png" /><span style={{ marginTop: "10px" }}></span></span>
       <div className="user">
         <img src={currentUser.photoURL} alt="" />
         <span>{currentUser.displayName}</span>
         <button
-          onClick={() => signOut(auth)}
+          onClick={logout}
         >logout</button>
       </div>
     </div>

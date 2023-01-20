@@ -2,23 +2,23 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyD8qp1B3ISlXSj-f5_l-_ArzvqFctvGySQ",
-  authDomain: "chat-app-48525.firebaseapp.com",
-  projectId: "chat-app-48525",
-  storageBucket: "chat-app-48525.appspot.com",
-  messagingSenderId: "830038359185",
-  appId: "1:830038359185:web:adc45eff79ca246b145330"
+  apiKey: "AIzaSyB4Y_5e5FOPxNF6FjlrJCtUh4WmyTttmi8",
+  authDomain: "social-media-app-c9b69.firebaseapp.com",
+  databaseURL: "https://social-media-app-c9b69-default-rtdb.firebaseio.com",
+  projectId: "social-media-app-c9b69",
+  storageBucket: "social-media-app-c9b69.appspot.com",
+  messagingSenderId: "968502154569",
+  appId: "1:968502154569:web:9cabaaf6d22125aee23698"
 };
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-// user auth
+// get auth
 export const auth = getAuth();
 // get storage
 export const storage = getStorage();
-export const db = getFirestore()
+//get firebase database
+export const db = getFirestore();
+

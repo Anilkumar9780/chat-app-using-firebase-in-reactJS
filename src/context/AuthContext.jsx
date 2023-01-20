@@ -1,10 +1,10 @@
 import { createContext, useEffect, useState } from "react";
 
-// firebase component
+// firebase components
 import { auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
-// create contetx 
+// create context 
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
@@ -16,7 +16,6 @@ export const AuthContextProvider = ({ children }) => {
       setCurrentUser(user);
       console.log(user);
     });
-
     return () => {
       unsub();
     };

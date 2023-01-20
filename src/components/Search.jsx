@@ -3,7 +3,7 @@ import React, { useContext, useState } from "react";
 // package
 import { toast } from 'react-toastify';
 
-// firebase component
+// firebase  library
 import {
   collection,
   query,
@@ -15,34 +15,32 @@ import {
   serverTimestamp,
   getDoc,
 } from "firebase/firestore";
-import { db } from "../firebase";
+
 
 //  context component
 import { AuthContext } from "../context/AuthContext";
+import { db } from "../firebase";
 
 const Search = () => {
   // states
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
-  const [err, setErr] = useState(false);
   const { currentUser } = useContext(AuthContext);
 
   /**
    * search user
    */
   const handleSearch = async () => {
-    const q = query(
+    const serchQuery = query(
       collection(db, "users"),
       where("displayName", "==", username)
     );
-
     try {
-      const querySnapshot = await getDocs(q);
+      const querySnapshot = await getDocs(serchQuery);
       querySnapshot.forEach((doc) => {
         setUser(doc.data());
       });
     } catch (error) {
-      setErr(true);
       toast.error(error, {
         position: toast.POSITION.TOP_RIGHT
       });
@@ -50,7 +48,7 @@ const Search = () => {
   };
 
   /**
-   * onchange key
+   * handle enter
    * @param {object} e 
    */
   const handleKey = (e) => {
@@ -68,7 +66,6 @@ const Search = () => {
         : user.uid + currentUser.uid;
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
-
       if (!res.exists()) {
         //create a chat in chats collection
         await setDoc(doc(db, "chats", combinedId), { messages: [] });
@@ -92,13 +89,19 @@ const Search = () => {
           [combinedId + ".date"]: serverTimestamp(),
         });
       }
-    } catch (error) { }
+    } catch (error) {
+      toast.error(error, {
+        position: toast.POSITION.TOP_RIGHT
+      });
+    }
     setUser(null);
     setUsername("");
     toast.error("User not found!", {
       position: toast.POSITION.TOP_RIGHT
     });
   };
+
+  // console.log(user)
 
   return (
     <div className="search">
@@ -111,9 +114,6 @@ const Search = () => {
           value={username}
         />
       </div>
-      {err && toast.error("User not found!", {
-        position: toast.POSITION.TOP_RIGHT
-      })}
       {user && (
         <div className="userChat"
           onClick={handleSelect}

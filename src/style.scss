@@ -15,8 +15,9 @@
 }
 
 .formContainer {
-  background-color: #a7bcff;
-  height: 100vh;
+  // background-color: #3f598e;
+  background-image: url('./advice-app/images/city.jpg');
+  height: 98vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -88,7 +89,8 @@
 }
 
 .home {
-  background-color: #a7bcff;
+  // background-color: #a7bcff;
+  background-image: url('./advice-app/images/city.jpg');
   height: 100vh;
   display: flex;
   align-items: center;

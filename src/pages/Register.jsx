@@ -1,10 +1,10 @@
 import React, { useState } from "react";
+
 // images src
 import Add from "../img/addAvatar.png";
 
-// firebase components
+// firebase library
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth, db, storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
 
@@ -12,12 +12,16 @@ import { doc, setDoc } from "firebase/firestore";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from 'react-toastify';
 
-// loader package
-import { Audio } from 'react-loader-spinner'
+// Component 
+import { Loaders } from "../Loader/Loader";
+import { auth, db, storage } from '../firebase'
 
 const Register = () => {
   // states
-  const [err, setErr] = useState(false);
+  const [file, setFile] = useState(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [displayName, setDisplayName] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -25,17 +29,16 @@ const Register = () => {
    * Register user
    * @param {object} e 
    */
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (event) => {
     setLoading(true);
-    e.preventDefault();
-    const displayName = e.target[0].value;
-    const email = e.target[1].value;
-    const password = e.target[2].value;
-    const file = e.target[3].files[0];
+    event.preventDefault();
     try {
       // Create user
       const res = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(res)
+      navigate("/");
+      toast.success("Register successfully Wellcome to Me Chat", {
+        position: toast.POSITION.TOP_RIGHT
+      })
       //Create a unique image name
       const date = new Date().getTime();
       const storageRef = ref(storage, `${displayName + date}`);
@@ -54,54 +57,77 @@ const Register = () => {
               email,
               photoURL: downloadURL,
             });
-
             //create empty user chats on firestore
             await setDoc(doc(db, "userChats", res.user.uid), {});
-            navigate("/");
-          } catch (err) {
-            console.log(err);
-            setErr(true);
+          } catch (error) {
+            toast.error(error, "Something went wrong", {
+              position: toast.POSITION.TOP_RIGHT
+            })
             setLoading(false);
           }
         });
       });
-    } catch (err) {
-      setErr(true);
+    } catch (error) {
+      toast.error(error, "Something went wrong", {
+        position: toast.POSITION.TOP_RIGHT
+      })
       setLoading(false);
     }
+    setDisplayName('');
+    setEmail('');
+    setPassword('');
+    setFile(null);
   };
 
   return (
     <div className="formContainer">
       <div className="formWrapper">
-        <span className="logo">Me Chat</span>
+        <span className="logo">
+          <img
+            src="https://img.icons8.com/color/48/null/communication.png"
+            alt="https://img.icons8.com/color/48/null/communication.png"
+          />
+        </span>
         <span className="title">Register</span>
         <form onSubmit={handleSubmit}>
-          <input required type="text" placeholder="display name" />
-          <input required type="email" placeholder="email" />
-          <input required type="password" placeholder="password" />
-          <input required style={{ display: "none" }} type="file" id="file" />
+          <input
+            required
+            type="text"
+            placeholder="Full Name"
+            value={displayName}
+            onChange={(event) => setDisplayName(event.target.value)}
+          />
+          <input
+            required
+            type="email"
+            placeholder="Email Address"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <input
+            required
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+          <input
+            required
+            style={{ display: "none" }}
+            type="file"
+            id="file"
+            onChange={(e) => setFile(e.target.files[0])}
+          />
           <label htmlFor="file">
             <img src={Add} alt="" />
-            <span>Add an avatar</span>
+            <span>Add an photo</span>
           </label>
-          <button>Sign up</button>
-          {loading && < Audio
-            height="80"
-            width="80"
-            radius="9"
-            color='green'
-            ariaLabel='three-dots-loading'
-            wrapperStyle
-            wrapperClass
-          />}
-          {err && toast.error("Something went wrong", {
-            position: toast.POSITION.TOP_RIGHT
-          })}
+          <button >Sign up</button>
+          <Loaders loader={loading} />
         </form>
         <p>
           You do have an account?
-          <Link to="/register">Login</Link>
+          <Link to="/login">Login</Link>
         </p>
       </div>
     </div>

@@ -7,6 +7,7 @@ import Attach from "../img/attach.png";
 // context componet
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
+import { db, storage } from "../firebase";
 
 // firebase package
 import {
@@ -18,13 +19,11 @@ import {
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
-// firebase component
-import { db, storage } from "../firebase";
-
 // package auto gen id
-// import { v4 as uuid } from "uuid";
 import { v4 as uuidv4 } from 'uuid';
 
+// package
+import { toast } from 'react-toastify';
 
 const Input = () => {
   // states
@@ -41,12 +40,13 @@ const Input = () => {
   const handleSend = async () => {
     if (img) {
       const storageRef = ref(storage, uuidv4());
-
       const uploadTask = uploadBytesResumable(storageRef, img);
-
       uploadTask.on(
         (error) => {
           //TODO:Handle Error
+          toast.error(error, {
+            position: toast.POSITION.TOP_RIGHT
+          });
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
@@ -56,6 +56,7 @@ const Input = () => {
                 text,
                 senderId: currentUser.uid,
                 date: Timestamp.now(),
+                dates: new Date().toLocaleString(),
                 img: downloadURL,
               }),
             });
@@ -69,33 +70,34 @@ const Input = () => {
           text,
           senderId: currentUser.uid,
           date: Timestamp.now(),
+          dates: new Date().toLocaleString(),
         }),
       });
     }
-
+    setText("");
+    setImg(null);
     await updateDoc(doc(db, "userChats", currentUser.uid), {
       [data.chatId + ".lastMessage"]: {
         text,
       },
       [data.chatId + ".date"]: serverTimestamp(),
     });
-
     await updateDoc(doc(db, "userChats", data.user.uid), {
       [data.chatId + ".lastMessage"]: {
         text,
       },
       [data.chatId + ".date"]: serverTimestamp(),
     });
-
     setText("");
     setImg(null);
   };
+
   return (
     <div className="input">
       <input
         type="text"
         placeholder="Type something..."
-        onChange={(e) => setText(e.target.value)}
+        onChange={(event) => setText(event.target.value)}
         value={text}
       />
       <div className="send">
@@ -104,13 +106,13 @@ const Input = () => {
           type="file"
           style={{ display: "none" }}
           id="file"
-          onChange={(e) => setImg(e.target.files[0])}
+          onChange={(event) => setImg(event.target.files[0])}
         />
         <label htmlFor="file">
           <img src={Img} alt="" />
         </label>
-        <button 
-        onClick={handleSend}
+        <button
+          onClick={handleSend}
         >Send</button>
       </div>
     </div>
@@ -118,3 +120,4 @@ const Input = () => {
 };
 
 export default Input;
+

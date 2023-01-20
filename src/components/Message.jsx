@@ -8,9 +8,9 @@ const Message = ({ message }) => {
   // user info
   const { currentUser } = useContext(AuthContext);
   const { data } = useContext(ChatContext);
-
   const ref = useRef();
 
+  // windows scroll into view chats
   useEffect(() => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
   }, [message]);
@@ -29,7 +29,7 @@ const Message = ({ message }) => {
           }
           alt=""
         />
-        <span>just now</span>
+        <span style={{ fontSize: "10px" }}>{message.dates}</span>
       </div>
       <div className="messageContent">
         <p>{message.text}</p>

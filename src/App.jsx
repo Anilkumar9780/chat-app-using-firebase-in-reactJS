@@ -4,24 +4,23 @@ import React, { useContext } from "react";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import { PopMessage } from "./Popupmessage/PopupMessage";
 
 // scss style
 import "./style.scss";
 
-// packages
+// packages react-router-dom
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 // context component
 import { AuthContext } from "./context/AuthContext";
 
-function App() {
+const App = () => {
   // get the user info 
   const { currentUser } = useContext(AuthContext);
 
   /**
-   * not user so login to push the login apge
+   * not user so push the login page
    * @param {object} param0 
    */
   const ProtectedRoute = ({ children }) => {
@@ -30,6 +29,7 @@ function App() {
     }
     return children
   };
+
 
   return (
     <>
@@ -49,20 +49,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-      {/* Same as */}
-      <ToastContainer />
+      <PopMessage />
     </>
   );
 }
